@@ -1,0 +1,16 @@
+{
+    "connector.class":"io.confluent.connect.s3.S3SinkConnector",
+    "tasks.max":"1",
+    "topics":"kong",
+    "s3.bucket.name":"kong-log",
+    "s3.part.size":"134217728",
+    "s3.compression.type":"gzip",
+    "flush.size":"3",
+    "aws.secret.access.key": "passwordtobedefine",
+    "aws.access.key.id": "kong_log",
+    "store.url":"http://172.0.0.1:9100",
+    "value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+    "format.class": "io.confluent.connect.s3.format.json.JsonFormat",
+    "storage.class": "io.confluent.connect.s3.storage.S3Storage",
+    "schema.compatibility": "NONE"
+}

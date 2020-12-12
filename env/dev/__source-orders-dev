@@ -1,0 +1,15 @@
+{
+    "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+    "database.user": "debezium",
+    "database.server.id": "12980",
+    "database.history.kafka.bootstrap.servers": "10.148.0.39:9092,10.148.0.55:9092,10.148.15.213:9092",
+    "database.history.kafka.topic": "test",
+    "database.server.name": "mysql-dev",
+    "database.port": "3306",
+    "table.whitelist": "orders_management_dev.event,orders_management_dev.order_aggregate,orders_management_dev.order_migration_status,orders_management_dev.order_view",
+    "database.hostname": "10.10.0.1",
+    "database.password": "tobedefine",
+    "database.history.kafka.recovery.poll.interval.ms": "1000",
+    "database.history.skip.unparseable.ddl": "true",
+    "database.whitelist": "orders_management"
+}

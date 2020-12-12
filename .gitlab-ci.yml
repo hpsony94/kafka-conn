@@ -1,0 +1,95 @@
+stages:
+- validate
+- apply
+- cleanup
+
+validate:connectors:
+  stage: validate
+  image:
+    name: <kafka-conn:image_tag>
+  only:
+    refs:
+    - merge_request
+    - master
+  script:
+  - |
+    for ENV in dev stag;
+    do
+      kafka-conn validate connectors/$ENV
+    done
+  tags:
+    - ci-general
+
+# # # # # # # # # # # # # # #
+# # # # #  Template # # # # # 
+# # # # # # # # # # # # # # #
+# Apply template
+.apply_template: &apply
+  stage: apply
+  only:
+    refs:
+      - master
+  image:
+    name: <kafka-conn:image_tag>
+  script:
+    - kafka-conn apply connectors/$ENV
+# Clean up template
+.apply_template: &cleanup
+  stage: cleanup
+  only:
+    refs:
+      - master
+  image:
+    name: <kafka-conn:image_tag>
+  script:
+    - kafka-conn sync connectors/$ENV
+
+connectors:dev:
+  <<: *apply
+  variables:
+    ENV: dev
+    KAFKA_CONNECT_URL: "confluent-kafka-cp-kafka-connect.confluent-kafka:8083"
+  tags:
+    - ci-develop
+  only:
+    refs:
+      - master
+    changes:
+      - connectors/dev/**/*
+_connectors:dev:
+  <<: *cleanup
+  variables:
+    ENV: dev
+    KAFKA_CONNECT_URL: "confluent-kafka-cp-kafka-connect.confluent-kafka:8083"
+  tags:
+    - ci-develop
+  only:
+    refs:
+      - master
+    changes:
+      - connectors/dev/**/*
+
+connectors:stag:
+  <<: *apply
+  variables:
+    ENV: stag
+    KAFKA_CONNECT_URL: "confluent-kafka-cp-kafka-connect.confluent-kafka:8083"
+  tags:
+    - ci-stage
+  only:
+    refs:
+      - master
+    changes:
+      - connectors/stag/**/*
+_connectors:stag:
+  <<: *cleanup
+  variables:
+    ENV: stag
+    KAFKA_CONNECT_URL: "confluent-kafka-cp-kafka-connect.confluent-kafka:8083"
+  tags:
+    - ci-stage
+  only:
+    refs:
+      - master
+    changes:
+      - connectors/stag/**/*
