@@ -1,6 +1,8 @@
 # Introduction
 Kafka-conn is a Kafka Connector provisioning as a code following Gitops concept by using Gitlab Pipeline.
 
+Deployment as Code ([GitOps style](https://gitops.tech/))
+
 # Installtion
 ## Prerequisite
 - Docker
